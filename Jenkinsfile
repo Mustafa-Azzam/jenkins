@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         AWS_ACCOUNT_ID = '126157276875'
-        AWS_REGION       = 'me-south-1'    // Change to your region
+        AWS_REGION = 'me-south-1'
         ECR_REPO_NAME = 'indana-client.app'
-        IMAGE_TAG = "${env.BUILD_NUMBER}"  // Use Jenkins build number as the image tag
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
@@ -26,8 +26,9 @@ pipeline {
         stage('Configure AWS CLI') {
             agent {
                 docker {
-                    image 'amazon/aws-cli'
-                    reuseNode true  // This will reuse the workspace on the same node
+                    image 'amazon/aws-cli'  // Directly from Docker Hub (no ECR needed)
+                    reuseNode true  // Reuse the same workspace
+                    args '--entrypoint=""'  // Override entrypoint to allow shell commands
                 }
             }
             steps {
@@ -38,12 +39,11 @@ pipeline {
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                 ]]) {
                     sh '''
-                        echo "Configuring AWS CLI..."
+                        echo "Testing AWS CLI..."
                         aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
                         aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
                         aws configure set region ${AWS_REGION}
-                        aws sts get-caller-identity  # Test the credentials
-                        aws s3 ls
+                        aws sts get-caller-identity  # Verify credentials
                     '''
                 }
             }
@@ -52,7 +52,7 @@ pipeline {
 
     post {
         success {
-            echo 'Docker image successfully built and pushed to ECR with tag ${IMAGE_TAG}!'
+            echo 'Pipeline completed successfully!'
         }
         failure {
             echo 'Pipeline failed!'
