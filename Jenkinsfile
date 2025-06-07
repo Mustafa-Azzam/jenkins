@@ -7,18 +7,18 @@ pipeline {
         }
     }
 
-    environment {
-        AWS_ACCOUNT_ID = '126157276875'
-        AWS_REGION       = 'me-south-1'    // Change to your region
-        ECR_REPO_NAME = 'indana-client.app'
-        IMAGE_TAG = "${env.BUILD_NUMBER}"  // Use Jenkins build number as the image tag
+    // environment {
+    //     AWS_ACCOUNT_ID = '126157276875'
+    //     AWS_REGION       = 'me-south-1'    // Change to your region
+    //     ECR_REPO_NAME = 'indana-client.app'
+    //     IMAGE_TAG = "${env.BUILD_NUMBER}"  // Use Jenkins build number as the image tag
 
-    }
+    // }
 
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'dev', credentialsId: 'github-jenkins-token', url: 'https://github.com/indanaio/MarketingMaker.Dashboard.v2.git'
+                git branch: 'main', url: 'https://github.com/Mustafa-Azzam/jenkins.git'
             }
         }
 
@@ -60,15 +60,15 @@ pipeline {
         //     }
         // }
 
-        stage('Tag Docker Image') {
-            steps {
-                script {
-                    // Tag the Docker image for ECR
-                    sh "docker tag ${ECR_REPO_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}"
-                    // dockerImage.tag("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}","${IMAGE_TAG}")
-                }
-            }
-        }
+        // stage('Tag Docker Image') {
+        //     steps {
+        //         script {
+        //             // Tag the Docker image for ECR
+        //             sh "docker tag ${ECR_REPO_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}"
+        //             // dockerImage.tag("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}","${IMAGE_TAG}")
+        //         }
+        //     }
+        // }
 
         // stage('Push Docker Image to ECR') {
         //     steps {
