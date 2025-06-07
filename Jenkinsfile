@@ -50,7 +50,10 @@ pipeline {
                     }
 
                     // Verify installation
-                    sh '/var/jenkins_home/bin/aws --version || aws --version'
+                    sh '''
+                        chmod 777 /var/jenkins_home/bin/aws
+                        /var/jenkins_home/bin/aws --version || aws --version
+                       '''
                 }
             }
         }
