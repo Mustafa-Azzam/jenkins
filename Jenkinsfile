@@ -26,7 +26,7 @@ pipeline {
         stage('Configure AWS CLI') {
             agent {
                 docker {
-                    image 'amazon/aws-cli'  // Directly from Docker Hub (no ECR needed)
+                    image 'public.ecr.aws/aws-cli/aws-cli'  // Directly from Docker Hub (no ECR needed)
                     reuseNode true  // Reuse the same workspace
                     args '--entrypoint=""'  // Override entrypoint to allow shell commands
                 }
