@@ -7,13 +7,13 @@ pipeline {
         }
     }
 
-    // environment {
-    //     AWS_ACCOUNT_ID = '126157276875'
-    //     AWS_REGION       = 'me-south-1'    // Change to your region
-    //     ECR_REPO_NAME = 'indana-client.app'
-    //     IMAGE_TAG = "${env.BUILD_NUMBER}"  // Use Jenkins build number as the image tag
+    environment {
+        AWS_ACCOUNT_ID = '126157276875'
+        AWS_REGION       = 'me-south-1'    // Change to your region
+        ECR_REPO_NAME = 'indana-client.app'
+        IMAGE_TAG = "${env.BUILD_NUMBER}"  // Use Jenkins build number as the image tag
 
-    // }
+    }
 
     stages {
         stage('Checkout Code') {
