@@ -1,12 +1,11 @@
 pipeline {
-    agent any
-    // {
-    //     docker {
-    //         image 'docker:dind'           // Uses Docker-in-Docker image
-    //         args '-v /var/run/docker.sock:/var/run/docker.sock'  // Shares host Docker socket
-    //         reuseNode true                // Runs on the same Jenkins worker
-    //     }
-    // }
+    agent {
+        docker {
+            image 'docker:dind'           // Uses Docker-in-Docker image
+            args '-v /var/run/docker.sock:/var/run/docker.sock'  // Shares host Docker socket
+            reuseNode true                // Runs on the same Jenkins worker
+        }
+    }
 
     environment {
         AWS_ACCOUNT_ID = '126157276875'
