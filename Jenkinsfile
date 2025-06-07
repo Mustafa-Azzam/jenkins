@@ -73,7 +73,6 @@ pipeline {
                         ${AWS_CLI} configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
                         ${AWS_CLI} configure set region ${AWS_REGION}
                         ${AWS_CLI} sts get-caller-identity  # Verify credentials
-                        ${AWS_CLI} s3 ls
                     '''
                 }
             }
