@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        AWS_CLI = '/var/jenkins_home/bin/aws'
         AWS_ACCOUNT_ID = '126157276875'
         AWS_REGION = 'me-south-1'
         ECR_REPO_NAME = 'indana-client.app'
@@ -65,11 +66,11 @@ pipeline {
                 ]]) {
                     sh '''
                         echo "Testing AWS CLI..."
-                        aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
-                        aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-                        aws configure set region ${AWS_REGION}
-                        aws sts get-caller-identity  # Verify credentials
-                        aws s3 ls
+                        ${AWS_CLI} configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+                        ${AWS_CLI} configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+                        ${AWS_CLI} configure set region ${AWS_REGION}
+                        ${AWS_CLI} sts get-caller-identity  # Verify credentials
+                        ${AWS_CLI} s3 ls
                     '''
                 }
             }
