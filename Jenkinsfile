@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        AWS_CLI = '/var/jenkins_home/bin'
+        AWS_CLI = '/var/jenkins_home/bin/aws'
         AWS_ACCOUNT_ID = '126157276875'
         AWS_REGION = 'me-south-1'
         ECR_REPO_NAME = 'indana-client.app'
@@ -52,7 +52,6 @@ pipeline {
                     // Verify installation
                     sh '''
                         chmod 777 /var/jenkins_home/bin/aws
-                        chmod 777 /var/jenkins_home/bin
                         /var/jenkins_home/bin/aws --version || aws --version
                        '''
                 }
