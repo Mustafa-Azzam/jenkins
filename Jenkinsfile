@@ -24,13 +24,13 @@ pipeline {
         }
 
         stage('Configure AWS CLI') {
-            agent {
-                docker {
-                    image 'public.ecr.aws/aws-cli/aws-cli'  // Directly from Docker Hub (no ECR needed)
-                    reuseNode true  // Reuse the same workspace
-                    args '--entrypoint=""'  // Override entrypoint to allow shell commands
-                }
-            }
+            // agent {
+            //     docker {
+            //         image 'public.ecr.aws/aws-cli/aws-cli'  // Directly from Docker Hub (no ECR needed)
+            //         reuseNode true  // Reuse the same workspace
+            //         args '--entrypoint=""'  // Override entrypoint to allow shell commands
+            //     }
+            // }
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
@@ -44,6 +44,7 @@ pipeline {
                         aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
                         aws configure set region ${AWS_REGION}
                         aws sts get-caller-identity  # Verify credentials
+                        aws s3 ls
                     '''
                 }
             }
