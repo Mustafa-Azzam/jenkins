@@ -23,14 +23,39 @@ pipeline {
             }
         }
 
+        stage('Verify/Install AWS CLI') {
+            steps {
+                script {
+                    // Check if AWS CLI is already installed
+                    def awsInstalled = sh(
+                        script: 'command -v aws || echo "not-installed"',
+                        returnStdout: true
+                    ).trim()
+
+                    if (awsInstalled == "not-installed") {
+                        echo "AWS CLI not found. Installing..."
+                        sh '''
+                            # Download and install AWS CLI v2
+                            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                            unzip awscliv2.zip
+                            ./aws/install -i /var/jenkins_home/aws-cli -b /var/jenkins_home/bin
+                            rm -rf awscliv2.zip aws/
+                            
+                            # Add to PATH for current session
+                            export PATH="/var/jenkins_home/bin:$PATH"
+                        '''
+                    } else {
+                        echo "AWS CLI already installed at: ${awsInstalled}"
+                    }
+
+                    // Verify installation
+                    sh '/var/jenkins_home/bin/aws --version || aws --version'
+                }
+            }
+        }
+        
         stage('Configure AWS CLI') {
-            // agent {
-            //     docker {
-            //         image 'public.ecr.aws/aws-cli/aws-cli'  // Directly from Docker Hub (no ECR needed)
-            //         reuseNode true  // Reuse the same workspace
-            //         args '--entrypoint=""'  // Override entrypoint to allow shell commands
-            //     }
-            // }
+
             steps {
                 withCredentials([[
                     $class: 'AmazonWebServicesCredentialsBinding',
